@@ -1,0 +1,2 @@
+# OsrsTrivia
+OSRS Trivia Website
