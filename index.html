@@ -5,38 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Basic Website</title>
     <link rel="stylesheet" href="styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.2/xlsx.full.min.js"></script> <!-- Include SheetJS library -->
 </head>
 <body>
     <header>
-        <h1>Welccome to OSRS Trivia.com</h1>
+        <h1>Welcome to OSRS Trivia.com</h1>
     </header>
 
     <main>
         <h2>Quiz</h2>
-    
+
         <!-- Question Container -->
         <section id="question-container">
-            <!-- Question 1 -->
-            <div class="question">
-                <p>What is the capital of France?</p>
-                <ul class="quiz">
-                    <li><button class="answer" data-correct="false">Berlin</button></li>
-                    <li><button class="answer" data-correct="true">Paris</button></li>
-                    <li><button class="answer" data-correct="false">Rome</button></li>
-                    <li><button class="answer" data-correct="false">Madrid</button></li>
-                </ul>
-            </div>
-    
-            <!-- Question 2 (initially hidden) -->
-            <div class="question" style="display: none;">
-                <p>Which planet is known as the Red Planet?</p>
-                <ul class="quiz">
-                    <li><button class="answer" data-correct="false">Earth</button></li>
-                    <li><button class="answer" data-correct="true">Mars</button></li>
-                    <li><button class="answer" data-correct="false">Jupiter</button></li>
-                    <li><button class="answer" data-correct="false">Saturn</button></li>
-                </ul>
-            </div>
+            <!-- Questions will be dynamically inserted here -->
         </section>
     
         <!-- Next Question Button (initially hidden) -->
@@ -48,6 +29,6 @@
         <p>&copy; osrstrivia.com</p>
     </footer>
 
-    <script src="script.js"></script>
+    <script src="script.js"></script> <!-- Include your script.js -->
 </body>
 </html>

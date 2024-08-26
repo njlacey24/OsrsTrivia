@@ -1,7 +1,50 @@
 document.addEventListener('DOMContentLoaded', function() {
     let currentQuestionIndex = 0;
-    const questions = document.querySelectorAll('.question');
+    let questions = [];
     const nextButton = document.getElementById('next-question');
+    const questionContainer = document.getElementById('question-container');
+
+    // Load the Excel file when the page loads
+    fetch('data/quiz_questions.xlsx')
+        .then(response => response.arrayBuffer())
+        .then(data => {
+            const workbook = XLSX.read(data, { type: 'array' });
+            const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
+            const excelData = XLSX.utils.sheet_to_json(firstSheet, { header: 1 });
+
+            // Convert excel data to questions array
+            questions = excelData.slice(1).map(row => {
+                return {
+                    question: row[0],
+                    answers: [row[1], row[2], row[3], row[4]],
+                    correctAnswer: row[5]
+                };
+            });
+
+            // Initialize the quiz with the first question
+            loadQuestion();
+        });
+
+    function loadQuestion() {
+        if (currentQuestionIndex < questions.length) {
+            const currentQuestion = questions[currentQuestionIndex];
+            questionContainer.innerHTML = `
+                <div class="question">
+                    <p>${currentQuestion.question}</p>
+                    <ul class="quiz">
+                        ${currentQuestion.answers.map((answer, index) => `
+                            <li><button class="answer" data-correct="${answer === currentQuestion.correctAnswer}">${answer}</button></li>
+                        `).join('')}
+                    </ul>
+                </div>
+            `;
+
+            // Attach event listeners to the new buttons
+            questionContainer.querySelectorAll('.answer').forEach(button => {
+                button.addEventListener('click', handleAnswerClick);
+            });
+        }
+    }
 
     function handleAnswerClick(event) {
         const selectedButton = event.target;
@@ -24,37 +67,14 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function showNextQuestion() {
-        // Hide the current question
-        questions[currentQuestionIndex].style.display = 'none';
-
-        // Move to the next question
         currentQuestionIndex++;
-        
         if (currentQuestionIndex < questions.length) {
-            // Show the next question
-            questions[currentQuestionIndex].style.display = 'block';
-            
-            // Hide the "Next Question" button until the question is answered
+            loadQuestion();
             nextButton.style.display = 'none';
         } else {
-            // All questions have been answered; handle quiz end (optional)
             alert('Quiz completed!');
         }
     }
 
-    // Attach event listeners to answer buttons and the next question button
-    questions.forEach(question => {
-        question.querySelectorAll('.answer').forEach(button => {
-            button.addEventListener('click', handleAnswerClick);
-        });
-    });
-
     nextButton.addEventListener('click', showNextQuestion);
-
-    // Initial setup: show the first question only
-    questions.forEach((question, index) => {
-        if (index !== currentQuestionIndex) {
-            question.style.display = 'none';
-        }
-    });
 });

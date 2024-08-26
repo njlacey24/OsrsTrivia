@@ -14,11 +14,11 @@ header {
 }
 
 main {
-    width: 60%; /* or any desired width */
-    margin: 0 auto; /* Centers the main element horizontally */
+    width: 60%;
+    margin: 0 auto;
     padding: 20px;
-    background-color: #ffffff; /* Optional: to see the centered area better */
-    text-align: center; /* Centers the text and inline elements inside main */
+    background-color: #ffffff;
+    text-align: center;
 }
 
 ul.quiz {
@@ -32,7 +32,7 @@ ul.quiz li {
 }
 
 ul.quiz button {
-    width: 60%;
+    width: 100%;
     padding: 12px;
     font-size: 16px;
     cursor: pointer;
@@ -65,10 +65,10 @@ button:hover {
 }
 
 footer {
-    width: 60%; /* or any desired width */
-    margin: 0 auto; /* Centers the main element horizontally */
+    width: 60%;
+    margin: 0 auto;
     padding: 50px;
-    text-align: center; /* Centers the text and inline elements inside main */
+    text-align: center;
 }
 
 #next-question {
