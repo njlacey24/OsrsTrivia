@@ -12,15 +12,37 @@
     </header>
 
     <main>
-        <h2>Multiple Choice Question</h2>
-        <p>What is max combat level in OSRS</p>
-        <ul id="quiz">
-            <li><button class="answer" data-correct="false">138</button></li>
-            <li><button class="answer" data-correct="true">126</button></li>
-            <li><button class="answer" data-correct="false">100</button></li>
-            <li><button class="answer" data-correct="false">99</button></li>
-        </ul>
-    </main>
+        <h2>Quiz</h2>
+    
+        <!-- Question Container -->
+        <section id="question-container">
+            <!-- Question 1 -->
+            <div class="question">
+                <p>What is the capital of France?</p>
+                <ul class="quiz">
+                    <li><button class="answer" data-correct="false">Berlin</button></li>
+                    <li><button class="answer" data-correct="true">Paris</button></li>
+                    <li><button class="answer" data-correct="false">Rome</button></li>
+                    <li><button class="answer" data-correct="false">Madrid</button></li>
+                </ul>
+            </div>
+    
+            <!-- Question 2 (initially hidden) -->
+            <div class="question" style="display: none;">
+                <p>Which planet is known as the Red Planet?</p>
+                <ul class="quiz">
+                    <li><button class="answer" data-correct="false">Earth</button></li>
+                    <li><button class="answer" data-correct="true">Mars</button></li>
+                    <li><button class="answer" data-correct="false">Jupiter</button></li>
+                    <li><button class="answer" data-correct="false">Saturn</button></li>
+                </ul>
+            </div>
+        </section>
+    
+        <!-- Next Question Button (initially hidden) -->
+        <button id="next-question" style="display: none;">Next Question</button>
+    
+    </main>    
 
     <footer>
         <p>&copy; osrstrivia.com</p>

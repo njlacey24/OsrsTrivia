@@ -21,13 +21,18 @@ main {
     text-align: center; /* Centers the text and inline elements inside main */
 }
 
-ul#quiz {
-    list-style-type: none;
-    padding: 0;
+ul.quiz {
+    list-style-type: none; /* Removes bullet points */
+    padding: 0;            /* Removes default padding */
+    margin: 0;             /* Removes default margin */
 }
 
-ul#quiz button {
-    width: 100%;
+ul.quiz li {
+    margin-bottom: 10px;  /* Adds some space between buttons */
+}
+
+ul.quiz button {
+    width: 60%;
     padding: 12px;
     font-size: 16px;
     cursor: pointer;
@@ -35,13 +40,13 @@ ul#quiz button {
     border-radius: 5px;
 }
 
-ul#quiz button.correct {
+ul.quiz button.correct {
     background-color: #28a745; /* Green for correct */
     border-color: #28a745;
     color: white;
 }
 
-ul#quiz button.incorrect {
+ul.quiz button.incorrect {
     background-color: #dc3545; /* Red for incorrect */
     border-color: #dc3545;
     color: white;
@@ -64,4 +69,20 @@ footer {
     margin: 0 auto; /* Centers the main element horizontally */
     padding: 50px;
     text-align: center; /* Centers the text and inline elements inside main */
+}
+
+#next-question {
+    margin-top: 20px;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    border: none;
+    background-color: #007bff;
+    color: white;
+    border-radius: 5px;
+    display: none; /* Initially hidden */
+}
+
+#next-question:hover {
+    background-color: #0056b3;
 }
