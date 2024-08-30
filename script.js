@@ -12,12 +12,15 @@ document.addEventListener('DOMContentLoaded', function() {
             const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
             const excelData = XLSX.utils.sheet_to_json(firstSheet, { header: 1 });
 
-            // Convert excel data to questions array
+            // Convert excel data to questions array, including difficulty
             questions = excelData.slice(1).map(row => {
                 return {
                     question: row[0],
                     answers: [row[1], row[2], row[3], row[4]],
-                    correctAnswer: row[5]
+                    correctAnswer: row[5],
+                    difficulty: parseFloat(row[6]), // Parse difficulty as a float
+                    correctCount: 0, // Initialize correct answer count
+                    incorrectCount: 0 // Initialize incorrect answer count
                 };
             });
 
@@ -28,16 +31,29 @@ document.addEventListener('DOMContentLoaded', function() {
     function loadQuestion() {
         if (currentQuestionIndex < questions.length) {
             const currentQuestion = questions[currentQuestionIndex];
-            questionContainer.innerHTML = `
-                <div class="question">
+            
+            // Randomize the answers array
+            const randomizedAnswers = shuffleArray(currentQuestion.answers);
+
+            // Prepare HTML for the current question
+            const questionHTML = `
+                <div class="question fade-in">
                     <p>${currentQuestion.question}</p>
                     <ul class="quiz">
-                        ${currentQuestion.answers.map((answer, index) => `
+                        ${randomizedAnswers.map((answer, index) => `
                             <li><button class="answer" data-correct="${answer === currentQuestion.correctAnswer}">${answer}</button></li>
                         `).join('')}
                     </ul>
                 </div>
             `;
+
+            // Insert the new question HTML
+            questionContainer.innerHTML = questionHTML;
+
+            // Allow the fade-in to complete
+            setTimeout(() => {
+                questionContainer.querySelector('.question').classList.add('show');
+            }, 10);
 
             // Attach event listeners to the new buttons
             questionContainer.querySelectorAll('.answer').forEach(button => {
@@ -62,19 +78,51 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
 
+        // Update difficulty based on the user's answer
+        updateDifficulty(isCorrect);
+
         // Show the "Next Question" button
         nextButton.style.display = 'block';
     }
 
-    function showNextQuestion() {
-        currentQuestionIndex++;
-        if (currentQuestionIndex < questions.length) {
-            loadQuestion();
-            nextButton.style.display = 'none';
+    function updateDifficulty(isCorrect) {
+        const currentQuestion = questions[currentQuestionIndex];
+        if (isCorrect) {
+            currentQuestion.correctCount++;
         } else {
-            alert('Quiz completed!');
+            currentQuestion.incorrectCount++;
         }
+
+        // Recalculate difficulty based on the ratio of correct to incorrect answers
+        currentQuestion.difficulty = 10 * (currentQuestion.incorrectCount / (currentQuestion.correctCount + currentQuestion.incorrectCount));
+    }
+
+    function showNextQuestion() {
+        const currentQuestionElement = questionContainer.querySelector('.question');
+        currentQuestionElement.classList.remove('fade-in', 'show');
+        currentQuestionElement.classList.add('fade-out');
+
+        // After the fade-out transition, load the next question
+        setTimeout(() => {
+            currentQuestionIndex++;
+            if (currentQuestionIndex < questions.length) {
+                loadQuestion();
+                nextButton.style.display = 'none';
+            } else {
+                alert('Quiz completed!');
+                // Optionally, save the updated difficulties here if desired
+            }
+        }, 500); // Match the duration of the fade-out transition
     }
 
     nextButton.addEventListener('click', showNextQuestion);
+
+    // Utility function to shuffle an array (Fisher-Yates algorithm)
+    function shuffleArray(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+        return array;
+    }
 });
