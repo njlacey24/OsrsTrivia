@@ -1,8 +1,11 @@
 document.addEventListener('DOMContentLoaded', function() {
     let currentQuestionIndex = 0;
     let questions = [];
+    let filteredQuestions = [];
     let streakCounter = 0; // Initialize streak counter
+    let selectedDifficulty = null; // Track selected difficulty
     const nextButton = document.getElementById('next-question');
+    const changeDifficultyButton = document.getElementById('change-difficulty'); // Reference to Change Difficulty button
     const questionContainer = document.getElementById('question-container');
     const streakCounterElement = document.getElementById('streak-counter'); // Reference to the counter element
 
@@ -25,12 +28,23 @@ document.addEventListener('DOMContentLoaded', function() {
             });
 
             // Initialize the quiz with the first question
-            loadQuestion();
+            loadQuestionsByDifficulty();
         });
 
+    // Function to filter questions by selected difficulty
+    function loadQuestionsByDifficulty() {
+        if (selectedDifficulty !== null) {
+            filteredQuestions = questions.filter(q => q.difficulty === selectedDifficulty);
+        } else {
+            filteredQuestions = questions;
+        }
+        currentQuestionIndex = 0;
+        loadQuestion();
+    }
+
     function loadQuestion() {
-        if (currentQuestionIndex < questions.length) {
-            const currentQuestion = questions[currentQuestionIndex];
+        if (currentQuestionIndex < filteredQuestions.length) {
+            const currentQuestion = filteredQuestions[currentQuestionIndex];
             
             // Randomize the answers array
             const randomizedAnswers = shuffleArray(currentQuestion.answers);
@@ -100,7 +114,7 @@ document.addEventListener('DOMContentLoaded', function() {
         // After the fade-out transition, load the next question
         setTimeout(() => {
             currentQuestionIndex++;
-            if (currentQuestionIndex < questions.length) {
+            if (currentQuestionIndex < filteredQuestions.length) {
                 loadQuestion();
                 nextButton.style.display = 'none';
             } else {
@@ -109,7 +123,16 @@ document.addEventListener('DOMContentLoaded', function() {
         }, 500); // Match the duration of the fade-out transition
     }
 
+    function changeDifficulty() {
+        const newDifficulty = prompt("Enter the difficulty level you want to filter by (0.00 to 10.00):");
+        if (newDifficulty !== null && !isNaN(newDifficulty)) {
+            selectedDifficulty = parseFloat(newDifficulty);
+            loadQuestionsByDifficulty();
+        }
+    }
+
     nextButton.addEventListener('click', showNextQuestion);
+    changeDifficultyButton.addEventListener('click', changeDifficulty);
 
     // Utility function to shuffle an array (Fisher-Yates algorithm)
     function shuffleArray(array) {
