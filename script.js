@@ -1,8 +1,10 @@
 document.addEventListener('DOMContentLoaded', function() {
     let currentQuestionIndex = 0;
     let questions = [];
+    let streakCounter = 0; // Initialize streak counter
     const nextButton = document.getElementById('next-question');
     const questionContainer = document.getElementById('question-container');
+    const streakCounterElement = document.getElementById('streak-counter'); // Reference to the counter element
 
     // Load the Excel file when the page loads
     fetch('data/quiz_questions.xlsx')
@@ -18,9 +20,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     question: row[0],
                     answers: [row[1], row[2], row[3], row[4]],
                     correctAnswer: row[5],
-                    difficulty: parseFloat(row[6]), // Parse difficulty as a float
-                    correctCount: 0, // Initialize correct answer count
-                    incorrectCount: 0 // Initialize incorrect answer count
+                    difficulty: parseFloat(row[6]) // Parse difficulty as a float
                 };
             });
 
@@ -78,23 +78,18 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
 
-        // Update difficulty based on the user's answer
-        updateDifficulty(isCorrect);
+        // Update the streak counter
+        if (isCorrect) {
+            streakCounter++;
+        } else {
+            streakCounter = 0;
+        }
+
+        // Update the counter display
+        streakCounterElement.textContent = `Correct Streak: ${streakCounter}`;
 
         // Show the "Next Question" button
         nextButton.style.display = 'block';
-    }
-
-    function updateDifficulty(isCorrect) {
-        const currentQuestion = questions[currentQuestionIndex];
-        if (isCorrect) {
-            currentQuestion.correctCount++;
-        } else {
-            currentQuestion.incorrectCount++;
-        }
-
-        // Recalculate difficulty based on the ratio of correct to incorrect answers
-        currentQuestion.difficulty = 10 * (currentQuestion.incorrectCount / (currentQuestion.correctCount + currentQuestion.incorrectCount));
     }
 
     function showNextQuestion() {
@@ -110,7 +105,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 nextButton.style.display = 'none';
             } else {
                 alert('Quiz completed!');
-                // Optionally, save the updated difficulties here if desired
             }
         }, 500); // Match the duration of the fade-out transition
     }
