@@ -3,7 +3,8 @@ document.addEventListener('DOMContentLoaded', function() {
     let questions = [];
     let filteredQuestions = [];
     let streakCounter = 0;
-    let selectedDifficulty = null; // Track selected difficulty
+    let selectedDifficultyMin = null; // Track minimum difficulty
+    let selectedDifficultyMax = null; // Track maximum difficulty
     const nextButton = document.getElementById('next-question');
     const changeDifficultyButton = document.getElementById('change-difficulty');
     const questionContainer = document.getElementById('question-container');
@@ -20,7 +21,6 @@ document.addEventListener('DOMContentLoaded', function() {
             const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
             const excelData = XLSX.utils.sheet_to_json(firstSheet, { header: 1 });
 
-            // Convert excel data to questions array, including difficulty
             questions = excelData.slice(1).map(row => {
                 return {
                     question: row[0],
@@ -33,10 +33,10 @@ document.addEventListener('DOMContentLoaded', function() {
             loadQuestionsByDifficulty();
         });
 
-    // Function to filter questions by selected difficulty
+    // Function to filter questions by selected difficulty range
     function loadQuestionsByDifficulty() {
-        if (selectedDifficulty !== null) {
-            filteredQuestions = questions.filter(q => q.difficulty === selectedDifficulty);
+        if (selectedDifficultyMin !== null && selectedDifficultyMax !== null) {
+            filteredQuestions = questions.filter(q => q.difficulty >= selectedDifficultyMin && q.difficulty <= selectedDifficultyMax);
         } else {
             filteredQuestions = questions;
         }
@@ -134,7 +134,8 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function selectDifficulty(event) {
-        selectedDifficulty = parseFloat(event.target.getAttribute('data-difficulty'));
+        selectedDifficultyMin = parseFloat(event.target.getAttribute('data-difficulty-min'));
+        selectedDifficultyMax = parseFloat(event.target.getAttribute('data-difficulty-max'));
         closeModal();
         loadQuestionsByDifficulty();
     }
