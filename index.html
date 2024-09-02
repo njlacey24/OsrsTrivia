@@ -24,11 +24,27 @@
         <button id="next-question" style="display: none;">Next Question</button>
         
         <!-- Change Difficulty Button -->
-        <button id="change-difficulty">Change Difficulty</button> <!-- Added Button -->
+        <button id="change-difficulty">Change Difficulty</button>
         
         <!-- Streak Counter -->
         <p id="streak-counter">Correct Streak: 0</p>
     </main>    
+
+    <!-- Difficulty Modal -->
+    <div id="difficulty-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-button" id="close-modal">&times;</span>
+            <h3>Select Difficulty</h3>
+            <div class="difficulty-buttons">
+                <button class="difficulty-option" data-difficulty="1">Easy</button>
+                <button class="difficulty-option" data-difficulty="2">Medium</button>
+                <button class="difficulty-option" data-difficulty="3">Hard</button>
+                <button class="difficulty-option" data-difficulty="4">Elite</button>
+                <button class="difficulty-option" data-difficulty="5">Master</button>
+                <button class="difficulty-option" data-difficulty="6">Grandmaster</button>
+            </div>
+        </div>
+    </div>
 
     <footer>
         <p>&copy; osrstrivia.com</p>

@@ -2,12 +2,15 @@ document.addEventListener('DOMContentLoaded', function() {
     let currentQuestionIndex = 0;
     let questions = [];
     let filteredQuestions = [];
-    let streakCounter = 0; // Initialize streak counter
+    let streakCounter = 0;
     let selectedDifficulty = null; // Track selected difficulty
     const nextButton = document.getElementById('next-question');
-    const changeDifficultyButton = document.getElementById('change-difficulty'); // Reference to Change Difficulty button
+    const changeDifficultyButton = document.getElementById('change-difficulty');
     const questionContainer = document.getElementById('question-container');
-    const streakCounterElement = document.getElementById('streak-counter'); // Reference to the counter element
+    const streakCounterElement = document.getElementById('streak-counter');
+    const difficultyModal = document.getElementById('difficulty-modal');
+    const closeModalButton = document.getElementById('close-modal');
+    const difficultyOptions = document.querySelectorAll('.difficulty-option');
 
     // Load the Excel file when the page loads
     fetch('data/quiz_questions.xlsx')
@@ -27,7 +30,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 };
             });
 
-            // Initialize the quiz with the first question
             loadQuestionsByDifficulty();
         });
 
@@ -123,16 +125,26 @@ document.addEventListener('DOMContentLoaded', function() {
         }, 500); // Match the duration of the fade-out transition
     }
 
-    function changeDifficulty() {
-        const newDifficulty = prompt("Enter the difficulty level you want to filter by (0.00 to 10.00):");
-        if (newDifficulty !== null && !isNaN(newDifficulty)) {
-            selectedDifficulty = parseFloat(newDifficulty);
-            loadQuestionsByDifficulty();
-        }
+    function toggleModal() {
+        difficultyModal.style.display = 'block';
+    }
+
+    function closeModal() {
+        difficultyModal.style.display = 'none';
+    }
+
+    function selectDifficulty(event) {
+        selectedDifficulty = parseFloat(event.target.getAttribute('data-difficulty'));
+        closeModal();
+        loadQuestionsByDifficulty();
     }
 
     nextButton.addEventListener('click', showNextQuestion);
-    changeDifficultyButton.addEventListener('click', changeDifficulty);
+    changeDifficultyButton.addEventListener('click', toggleModal);
+    closeModalButton.addEventListener('click', closeModal);
+    difficultyOptions.forEach(option => {
+        option.addEventListener('click', selectDifficulty);
+    });
 
     // Utility function to shuffle an array (Fisher-Yates algorithm)
     function shuffleArray(array) {
@@ -142,4 +154,11 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         return array;
     }
+
+    // Close the modal if the user clicks outside of it
+    window.onclick = function(event) {
+        if (event.target === difficultyModal) {
+            closeModal();
+        }
+    };
 });
